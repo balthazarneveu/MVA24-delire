@@ -1,7 +1,7 @@
 # MVA24-delire
 Image restoration
 
-# [Reports](index.html)
+# [Reports](https://balthazarneveu.github.io/MVA24-delire/)
 
 
 # :test_tube: Lab sessions
