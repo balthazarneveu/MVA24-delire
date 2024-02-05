@@ -4,10 +4,11 @@
 import torch
 import torch.nn as nn
 import numpy as np
-
+from pathlib import Path
+here = Path(__file__).parent
 # ---- load the model based on the type and sigma (noise level) ----
 def load_model(model_type, sigma, cuda=True):
-    path = "Pretrained_models/" + model_type + "_noise" + str(sigma) + ".pth"
+    path = here.parent/"Pretrained_models"/ (model_type + "_noise" + str(sigma) + ".pth")
     if model_type == "DnCNN":
         from model.models import DnCNN
         net = DnCNN(channels=1, num_of_layers=17)
