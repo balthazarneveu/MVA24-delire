@@ -7742,9 +7742,12 @@ $$ y^{1} = \text{prox}_{\alpha F}(x^{1} + u^0, \tilde{u}) =  \frac{\gamma . (x^{
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align:center"><img alt="" src="figures/DnCNN_s=30_sigma=15.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/DnCNN_s=30_sigma=40.png"/></td>
+</tr>
 </tbody>
 </table>
-<p><img alt="" src="figures/DnCNN_s=30_sigma=15.png"/> |  <img alt="" src="figures/DnCNN_s=30_sigma=40.png"/> |</p>
 <hr/>
 <h3 id="Question-5">Question 5<a class="anchor-link" href="#Question-5">¶</a></h3><blockquote>
 <p>Disclaimer: <em>I solved question 5 and wrote the answers without notticing the "Check convergence conditions" section so I basically had to find everything by myself which roughly took me half a day</em>.</p>
@@ -7891,7 +7894,52 @@ Let's get an intuition of what</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Question-7:-sensitivity-to-initialization">Question 7: sensitivity to initialization<a class="anchor-link" href="#Question-7:-sensitivity-to-initialization">¶</a></h4>
+<h4 id="Question-7:-(in)sensitivity-to-initialization">Question 7: (in)sensitivity to initialization<a class="anchor-link" href="#Question-7:-(in)sensitivity-to-initialization">¶</a></h4><p>The PnP algorithm is <strong>almost unsensitive to initialization conditions</strong>. We get similar results no matter initializing with zeros, random uniform noise (between 0 and 1). This is a remarkable property and the convergence of DRS was proved no matter the initialization.</p>
+<p><img alt="" src="figures/convergence_speed.png"/></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Sensitivity to initialization: Normal vs Zeros</th>
+<th style="text-align:center">Crazy vs Random noise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Top row : "normal" init with noisy image</td>
+<td style="text-align:center">Top row : "crazy" noise between -100 and 100,</td>
+</tr>
+<tr>
+<td style="text-align:center"><img alt="" src="figures/sensitivity_of_initialization_zeros_vs_normal.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/sensitivity_of_initialization_noisy_vs_crazy.png"/></td>
+</tr>
+<tr>
+<td style="text-align:center">Bottom row: init with zeros</td>
+<td style="text-align:center">Bottom row: uniform noise between 0 and 1</td>
+</tr>
+<tr>
+<td style="text-align:center">Left to right $\sigma = 5, 15, 40$</td>
+<td style="text-align:center">Left to right $\sigma = 5, 15, 40$</td>
+</tr>
+</tbody>
+</table>
+<p>The $\sigma=5$ case (with no guaranty of convergence) becomes more problematic with bad initialization.</p>
+<p>Visualizing convergence visually: $n_\text{iterations PnP} =[0, 3, 6, 9, 20, 100], \gamma= 0.57, \sigma=15$.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Random uniform noise initialization</th>
+<th style="text-align:center">Regular initialization from noisy image</th>
+<th style="text-align:center">Initialization from zeros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img alt="" src="figures/convergence_init_from_rand_noise.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/convergence_init_from_noisy.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/convergence_init_from_zeros.png"/></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -7903,7 +7951,11 @@ Let's get an intuition of what</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <hr/>
-<h4 id="Question-8:-ADMM">Question 8: ADMM<a class="anchor-link" href="#Question-8:-ADMM">¶</a></h4>
+<h4 id="Question-8:-ADMM">Question 8: ADMM<a class="anchor-link" href="#Question-8:-ADMM">¶</a></h4><p><img alt="" src="figures/drs_vs_admm.png"/></p>
+<ul>
+<li>See the code.</li>
+<li>Proof of the equivalency between DRS and ADMM : not found.</li>
+</ul>
 </div>
 </div>
 </div>
