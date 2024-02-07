@@ -5,5 +5,7 @@ Image restoration
 
 
 # :test_tube: Lab sessions
-- Lab1 [report](/TP_1/report_tp1.pdf)
-- Lab2 [report](/TP_2/report_tp2.pdf) | [report notebook](/TP_2/report_tp2_neveu_balthazar.ipynb)
+- Lab1: DCTDenoiser, FFDNet: [report](/TP_1/report_tp1.pdf)
+- Lab2: Plug and Play prior:  [report](/TP_2/report_tp2.pdf) | [report notebook](/TP_2/report_tp2_neveu_balthazar.ipynb)
+- Lab3: Diffusion models.
+- Lab4: Auto-encoder, VAE [notebook](/TP_4/tp_4.ipynb)
