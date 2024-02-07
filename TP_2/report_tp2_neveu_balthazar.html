@@ -8113,87 +8113,6 @@ which can be re-written for the whole matrix using vector notations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Code of the proximal operator for the data term (inpainting with known mask oracel +denoising problem)</span>
-<span class="k">def</span> <span class="nf">prox_datafit_inpainting</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Proximal Operator for Inpainting combined with gaussian denoising</span>
-<span class="sd">    using oracle mask</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        x (np.ndarray): argument to the proximal operator.</span>
-<span class="sd">        y (np.ndarray): noisy observation.</span>
-<span class="sd">        mask (np.ndarray): binary image of the same size as x. Assumed a float array filled with 0. and 1.</span>
-<span class="sd">        alpha (float): alpha value (data fidelity parameter).</span>
-<span class="sd">        s (float): noise value (standard deviation of the gaussian noise in y).</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: proximal value</span>
-<span class="sd">    </span>
-<span class="sd">    Equations:</span>
-<span class="sd">    ==========</span>
-<span class="sd">    f(x) = || M*x - y ||^2 / (2 s^2)</span>
-
-<span class="sd">    prox_{alpha f} (x[i]) = (x[i]*s^2 + y[i]*alpha)/(s^2+alpha) if M[i]==1</span>
-<span class="sd">                          = x[i]                                if M[i]==0</span>
-<span class="sd">    """</span>
-
-    
-    <span class="n">s2</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">unmasked_proximal_value</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">s2</span><span class="o">+</span><span class="n">y</span><span class="o">*</span><span class="n">alpha</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">s2</span><span class="o">+</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">proximal_value</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">unmasked_proximal_value</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span>
-    <span class="k">return</span> <span class="n">proximal_value</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Code to generate the inpainting input data (degraded and masked data)</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
-<span class="k">def</span> <span class="nf">create_inpainting_input_data</span><span class="p">(</span>
-        <span class="n">clean_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">proba_visible</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-        <span class="n">noise_level_255</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">"""Inpainting input data creation</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        - clean_image (np.ndarray): normalized clean image between 0 and 1 &lt;-&gt; u</span>
-<span class="sd">        - proba_visible (float, optional): probability p in the Bernoulli that a pixel is visible</span>
-<span class="sd">        p(m_i=1) = p, p(m_i=0) = 1-p</span>
-<span class="sd">        Defaults to 0.1. &lt;-&gt; p</span>
-<span class="sd">        - noise_level_255 (float, optional): _description_. Defaults to 1.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Tuple[np.ndarray, np.ndarray]:</span>
-<span class="sd">        - noisy image &lt;-&gt; utilde</span>
-<span class="sd">        - mask (degradation operator) &lt;-&gt; m</span>
-<span class="sd">    """</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Freeze random number generator for reproducibility</span>
-    <span class="n">noise_level_normalized</span> <span class="o">=</span> <span class="n">noise_level_255</span><span class="o">/</span><span class="mf">255.0</span> 
-    <span class="n">mask</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">clean_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">proba_visible</span><span class="p">)</span> <span class="c1"># Bernoulli mask</span>
-    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">noise_level_normalized</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">clean_image</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-    <span class="n">noisy</span> <span class="o">=</span> <span class="n">mask</span><span class="o">*</span><span class="n">clean_image</span> <span class="o">+</span> <span class="n">noise</span>
-    <span class="k">return</span> <span class="n">noisy</span><span class="p">,</span> <span class="n">mask</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -8215,16 +8134,6 @@ $\lambda = \frac{\sigma^2}{\alpha}$ , $\alpha<1$ to leave a bit of noise.
 
 - $s$ actual standard deviation in $\tilde{u}$
 - $\sigma$ noise standard deviation used to train the denoiser whose residual is considered as the poximal of $G$ -->
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 </div>
 </div>
 </div>
