@@ -1,0 +1,1 @@
+jupyter nbconvert TP_4/tp_4.ipynb --to html
