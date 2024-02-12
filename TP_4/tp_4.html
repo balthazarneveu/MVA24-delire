@@ -9205,7 +9205,7 @@ Covariance matrix of latent codes: tensor([[ 2.0987, -0.4368,  0.1009, -0.3488, 
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Your answer:</strong></p>
 <ul>
-<li><p>We don't get a point perfectly centered at  $\mu=0$, $\sigma=1$ ...</p>
+<li><p>We don't get a point perfectly centered at  $\mu=0$, $\sigma=1$ ...  We get the $\mu$ centered around 0 though but $\sigma&lt; 1$ . As if the learning process mis-estimated the variance on purpose to stay as much as possible in the deterministic case.</p>
 </li>
 <li><p>It is expected to be slightly widespread... it's not possible to get a point by construction:</p>
 <ul>
@@ -9230,9 +9230,16 @@ Covariance matrix of latent codes: tensor([[ 2.0987, -0.4368,  0.1009, -0.3488, 
 <td style="text-align:center"><img alt="" src="figures/latent_parameters_scatter_ampli_1x.png"/></td>
 <td style="text-align:center"><img alt="" src="figures/latent_parameters_scatter_ampli_10x.png"/></td>
 </tr>
+<tr>
+<td style="text-align:center">$\sigma$ is not well centered around 1</td>
+<td style="text-align:center">$\sigma$ get closer to 1 but results are blurier</td>
+</tr>
+<tr>
+<td style="text-align:center"><img alt="" src="figures/vae_generation_twenty_2.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/kld_ampli_10x_blurry_samples.png"/></td>
+</tr>
 </tbody>
 </table>
-<p>|<img alt="" src="figures/kld_ampli_1x_blurry_samples.png"> | <img alt="" src="figures/kld_ampli_10x_blurry_samples.png"/></img></p>
 <p><strong>NOTE</strong>
 One could also think that if you force the sigma value to the average $sigma$ estimated by the encoder over the training set, you'd get better results... in fact you get garbage...</p>
 <p><img alt="" src="figures/forced_sigma_out_of_vae.png"/></p>
@@ -9728,8 +9735,10 @@ Variational autoencoder model score: 84.8442%
 There are somehow other more convential alternative generative methods:</p>
 <ul>
 <li>use a GAN loss to train the auto-encoder (learn an  additional discriminator encoder which will learn to tell whether an image has been generated or not - real or fake)</li>
-<li>diffusion model: perform many tiny steps of denoising (to take progressive steps toward maximizing the probability of belonging to the image manifold)</li>
+<li>diffusion model: perform many tiny steps of denoising (to take progressive steps toward maximizing the probability of belonging to the image manifold).</li>
 </ul>
+<hr/>
+<h1 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h1><p>Although this lab session works on tiny MNIST images (and we didn't use CNN and hard to tell how general these conclusions are), the results are pretty interesting and seem to show to me (personal opinion) that the VAE approach seems difficult to use and literally not as good as the promising math groundings behind it.  Overall a nice toy example to play with (very fast to train) and I already see a lot of possible modifications of the systems.</p>
 </div>
 </div>
 </div>
