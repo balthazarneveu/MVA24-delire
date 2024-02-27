@@ -7489,6 +7489,243 @@ a.anchor-link {
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id=""><a class="anchor-link" href="#">¶</a></h1>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Question-1">Question 1<a class="anchor-link" href="#Question-1">¶</a></h3><blockquote>
+<p>Use</p>
+<ul>
+<li>the definition of the forward process $x_t \sim \mathcal{N}( \sqrt{\bar{\alpha_t}}x_{0},\,(1-\bar{\alpha_t}) I)$</li>
+<li>Tweedie's identity</li>
+</ul>
+<p>to show that
+$ \widehat{x_0}(x_t) = E[x_0|x_t] = \frac{1}{\sqrt{\bar\alpha_t}} \left( x_t + (1-\bar\alpha_t) \nabla \log p(x_t) \right) $.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Tweedie's formula</strong></p>
+<ul>
+<li>$y = X+ N$<ul>
+<li>$y$ noisy version of clean image</li>
+<li>$X$ with an additive white gaussian noise $N \sim \mathcal{N}(0, \sigma^2 I)$ (variance $\sigma^2$)</li>
+</ul>
+</li>
+<li>MMSE denoiser $D^{*}_{\sigma^2}(y) = \mathbb{E}[X|y=X+N]$.<ul>
+<li>$D^{*}$ the star means this is the ideal maximum mean squared error denoiser.</li>
+<li>This will be modeled using a denoiser neural network trained on the AWGN denoising problem using the MSE loss.</li>
+<li>We'll only get an approximation of $D^{*}$</li>
+</ul>
+</li>
+<li>$\frac{1}{\sigma^2} (D^{*}_{\sigma^2} - I)(x) = \nabla \log p_{\sigma^2}(x)$<ul>
+<li>where $p_{\sigma^2}(x)$ is the blurred version of the probability distribution of p by the Gaussian kernel of variance $\sigma^2$ .</li>
+<li>$p_{\sigma^2} := p \star g_{\sigma^2}$</li>
+<li>This means that the denoising residual is proportional to the score function (gradient of log propability) if the blurred distribution. The more noise level, the blurrier probability distribution.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Result proof</strong></p>
+<ul>
+<li>From the forward process definition:<ul>
+<li>(1) $x_t = \sqrt{\bar{\alpha_t}}x_{0} + N$</li>
+<li>with $N \sim \mathcal{N}(0, (1-\bar{\alpha_t})I) $</li>
+<li>Note: <em>$x_t$ is a noisy and "darker" (by a factor $\bar{\alpha_t}$) version of $x_{0}$. Making the image intensity tend to 0 is necessary to end up with a zero centered gaussian noise when $t \rightarrow \infty$</em></li>
+</ul>
+</li>
+<li>$ \widehat{x_0}(x_t) = E[x_0|x_t]$<ul>
+<li>$\widehat{x_0}(x_t)$ is the ideal MMSE denoiser result of $x_t$ .</li>
+</ul>
+</li>
+<li>$ \widehat{x_0}(x_t) = E[x_0| \sqrt{\bar{\alpha_t}}x_{0} + N]$ by (1) the forward process definition</li>
+</ul>
+<p>We first need  to adapt to be able to apply Tweedie's formula ($\bar{\alpha_t}x_{0}$  and $x_{0}$ appear..., let's make it $X = \sqrt{\bar{\alpha_t}}X_{0}$ so we can apply it):</p>
+<p>$$ \widehat{x_0}(x_t) = \frac{1}{\sqrt{\bar{\alpha_t}}} \mathbb{E}[\sqrt{\bar{\alpha_t}} x_0| \sqrt{\bar{\alpha_t}}x_{0} + N = x_{t}]$$</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>We can apply Tweedie's formula:
+$$ \mathbb{E}(X | X + N =x_t) = x_t + {\sigma^2} \nabla \log p_{\sigma^2}(X=x_t)$$
+with a variance of $\sigma^2 = (1-\bar{\alpha_t})$</p>
+<p>$$\widehat{x_0}(x_t)  = \frac{1}{\sqrt{\bar{\alpha_t}}} \left[ x_t + { (1-\bar{\alpha_t})} \nabla \log p_{(1-\bar{\alpha_t})}(X=x_t)\right]$$
+with $ p_{(1-\bar{\alpha_t})}(X=x_t) = p_{(1-\bar{\alpha_t})}(X_0=\frac{x_t}{\sqrt{\bar{\alpha_t}}}) $
+Here the smoothed probability of $X_0$ appears!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Question-2">Question 2<a class="anchor-link" href="#Question-2">¶</a></h3><p>Forward process : $x_t = \sqrt{\bar\alpha_t} x_0 + \sqrt{1-\bar\alpha_t}\epsilon_t$
+$$x_{0} = \frac{x_{t} - \sqrt{1-\bar\alpha_t} \epsilon_t}{\sqrt{\bar\alpha_t}}$$</p>
+<p>If we have an estimation of the noise $\epsilon$ we should be able to recover the clean signal...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>$$\epsilon_t = \frac{x_t - \sqrt{ \bar\alpha_t}x_0}{\sqrt{1-\bar\alpha_t}}$$</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Question-3">Question 3<a class="anchor-link" href="#Question-3">¶</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<ul>
+<li>From question 1: $$ \widehat{x_0}(x_t) = \mathbb{E}[x_0|x_t] = \frac{1}{\sqrt{\bar\alpha_t}} \left( x_t + (1-\bar\alpha_t) \nabla \log p(x_t) \right) $$</li>
+<li>From question 2: $$x_{0} = \frac{x_{t} - \sqrt{1-\bar\alpha_t} \epsilon_t}{\sqrt{\bar\alpha_t}}$$</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<ul>
+<li>$\widehat{x_0}(x_t) = \mathbb{E}[x_0|x_t] = \frac{1}{\sqrt{\bar\alpha_t}} \mathbb{E}[x_{t} - \sqrt{1-\bar\alpha_t} \epsilon_t | x_t] $<ul>
+<li>by definition of $\widehat{x_0}(x_t)$</li>
+<li>by substitution of the result from question 2 for $x_0$ under the expectation symbol.</li>
+</ul>
+</li>
+<li>$\sqrt{\bar\alpha_t}  \widehat{x_0}(x_t)  = x_{t}  - \sqrt{1-\bar\alpha_t} \mathbb{E}[ \epsilon_t | x_t]  $<ul>
+<li>by linearity of the expectation</li>
+<li>and since $\mathbb{E}[X|X=x] = x$</li>
+</ul>
+</li>
+<li>$\sqrt{\bar\alpha_t}  \widehat{x_0}(x_t) = x_t + (1-\bar\alpha_t) \nabla \log p(x_t)$ <em>from question 1</em></li>
+<li>We can remove $x_t$ on both sides.</li>
+<li>$(1-\bar\alpha_t) \nabla \log p(x_t) = -\sqrt{1-\bar\alpha_t} \mathbb{E}[ \epsilon_t | x_t]$</li>
+<li>$\Leftrightarrow  \nabla \log p(x_t) = -\frac{1}{\sqrt{1-\bar\alpha_t}} \mathbb{E}[ \epsilon_t | x_t] $</li>
+</ul>
+<p>$\mathbb{E}[ \epsilon_t | x_t] = \hat{\epsilon}(x_t)  \approx \hat{\epsilon}_{\theta}(x_t, t) $ is the expectation of the noise realization. This will be approximated by the neural network trained using MMSE. At that point, I think that the equal symbol does not stand and that we start making approximations.</p>
+<p><strong>Result</strong>
+$$\nabla \log p(x_t) = - \frac{1}{\sqrt{1-\bar\alpha_t}} \hat\epsilon_\theta(x_t)$$</p>
+<hr/>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Question-4">Question 4<a class="anchor-link" href="#Question-4">¶</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Update equation can be rewritten as:</p>
+<p>$$x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left(x_{t} - \frac{\beta_t}{\sqrt{1 - \bar{\alpha_t}}}  \hat\epsilon \right) + \sigma_t z_t = \frac{1}{\sqrt{\alpha_t}} \left(x_{t} + \underbrace{\beta_t}_{1-\alpha_t} . \underbrace{\left[- \frac{1}{\sqrt{1 - \bar{\alpha_t}}}  \hat\epsilon\right]}_{\nabla \log p(x_t)} \right) + \sigma_t z_t$$</p>
+<p>$\rightarrow x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left(x_{t} + (1 - \alpha_t) \nabla \log p(x_t) \right) + \sigma_t z_t$</p>
+<p>Looks familiar... Looks like stochastic gradient ascent as we're trying to maximize the likelihood of$x_t$ to belong to the image distribution   (stochastic because of the $\sigma_t z_t$ noise term).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+</div>
+</div>
+</div>
+</div>
 </main>
 </body>
 </html>
