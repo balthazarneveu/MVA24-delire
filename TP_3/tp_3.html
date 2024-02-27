@@ -7569,8 +7569,8 @@ $ \widehat{x_0}(x_t) = E[x_0|x_t] = \frac{1}{\sqrt{\bar\alpha_t}} \left( x_t + (
 </li>
 <li>$ \widehat{x_0}(x_t) = E[x_0| \sqrt{\bar{\alpha_t}}x_{0} + N]$ by (1) the forward process definition</li>
 </ul>
-<p>We first need  to adapt to be able to apply Tweedie's formula ($\bar{\alpha_t}x_{0}$  and $x_{0}$ appear..., let's make it $X = \sqrt{\bar{\alpha_t}}X_{0}$ so we can apply it):</p>
-<p>$$ \widehat{x_0}(x_t) = \frac{1}{\sqrt{\bar{\alpha_t}}} \mathbb{E}[\sqrt{\bar{\alpha_t}} x_0| \sqrt{\bar{\alpha_t}}x_{0} + N = x_{t}]$$</p>
+<p>We first need  to adapt to be able to apply Tweedie's formula ($\bar{\alpha_t}x_{0}$  and $x_{0}$ appear..., let's make $X = \sqrt{\bar{\alpha_t}}X_{0}$ appear on both sides so we can apply the formula):</p>
+<p>$$ \widehat{x_0}(x_t) = \frac{1}{\sqrt{\bar{\alpha_t}}} \mathbb{E}[\underbrace{\sqrt{\bar{\alpha_t}} x_0}_{X}| \underbrace{\sqrt{\bar{\alpha_t}}x_{0}}_{X} + N = x_{t}]$$</p>
 </div>
 </div>
 </div>
@@ -7581,12 +7581,18 @@ $ \widehat{x_0}(x_t) = E[x_0|x_t] = \frac{1}{\sqrt{\bar\alpha_t}} \left( x_t + (
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can apply Tweedie's formula:
-$$ \mathbb{E}(X | X + N =x_t) = x_t + {\sigma^2} \nabla \log p_{\sigma^2}(X=x_t)$$
-with a variance of $\sigma^2 = (1-\bar{\alpha_t})$</p>
+<p>We can apply Tweedie's formula:</p>
+<ul>
+<li>with a variance of $\sigma^2 = (1-\bar{\alpha_t})$</li>
+<li>with the reparameterization  $X = \sqrt{\bar{\alpha_t}}X_{0}$ previously mentioned
+$$ \mathbb{E}(X | X + N =x_t) = x_t + {\sigma^2} \nabla \log p_{\sigma^2}(X=x_t)$$</li>
+</ul>
 <p>$$\widehat{x_0}(x_t)  = \frac{1}{\sqrt{\bar{\alpha_t}}} \left[ x_t + { (1-\bar{\alpha_t})} \nabla \log p_{(1-\bar{\alpha_t})}(X=x_t)\right]$$
-with $ p_{(1-\bar{\alpha_t})}(X=x_t) = p_{(1-\bar{\alpha_t})}(X_0=\frac{x_t}{\sqrt{\bar{\alpha_t}}}) $
-Here the smoothed probability of $X_0$ appears!</p>
+If we look cautiously, this is not exactly the result we'd expect as <strong>a blurred probability appears</strong>!</p>
+<p>with $ p_{(1-\bar{\alpha_t})}(X=x_t) = p_{(1-\bar{\alpha_t})}(X_0=\frac{x_t}{\sqrt{\bar{\alpha_t}}})$
+Here the smoothed probability of $X_0$ appears which is equal to the probability $p(X_t=x_t)$ of the <strong>non smoothed but noisy version</strong> $X_t$ defined by the forward process  (adding Gaussian noise is equivalent to convolve the distribution by a gaussian blur).</p>
+<p>Hence the final result</p>
+<p>$$\widehat{x_0}(x_t)  = \frac{1}{\sqrt{\bar{\alpha_t}}} \left[ x_t + { (1-\bar{\alpha_t})} \nabla \log p(x_t)\right]$$</p>
 </div>
 </div>
 </div>
