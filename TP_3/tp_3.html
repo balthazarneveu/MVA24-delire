@@ -7773,7 +7773,10 @@ $$\nabla \log p(x_t) = - \frac{1}{\sqrt{1-\bar\alpha_t}} \hat\epsilon_\theta(x_t
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <hr/>
 <h1 id="Diffusion-models-for-inverse-problems">Diffusion models for inverse problems<a class="anchor-link" href="#Diffusion-models-for-inverse-problems">¶</a></h1><p><img alt="" src="figures/degradation.png"/></p>
-<p>Degradation: Large motion blur with AWGN</p>
+<ul>
+<li>Degradation: Large motion blur with mild AWGN</li>
+<li>Problem : Non-blind deblurring.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7867,21 +7870,26 @@ input.</p>
 <table>
 <thead>
 <tr>
+<th style="text-align:center">$\eta$=1 (proposed by the authors of DPS)</th>
 <th style="text-align:center">Adaptive $\eta$</th>
-<th style="text-align:center">$\eta$=1</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><img alt="" src="figures/diffusion_guided_deblur_eta_adapt.png"/></td>
 <td style="text-align:center"><img alt="" src="figures/diffusion_guided_deblur_eta=1.png"/></td>
+<td style="text-align:center"><img alt="" src="figures/diffusion_guided_deblur_eta_adapt.png"/></td>
 </tr>
 <tr>
-<td style="text-align:center">26.06db</td>
 <td style="text-align:center">21.49db</td>
+<td style="text-align:center">26.06db</td>
+</tr>
+<tr>
+<td style="text-align:center">Worse results (true for $T=100$) , not faithful image</td>
+<td style="text-align:center">More faithful image, still not so good</td>
 </tr>
 </tbody>
 </table>
+<p>Better results with adaptive $\eta$. Observation breaks when <strong>we add more iterations</strong> (see question 8) with $T=1000$, we end up with better results when $\eta=1$.</p>
 </div>
 </div>
 </div>
@@ -7892,7 +7900,103 @@ input.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Question-7">Question 7<a class="anchor-link" href="#Question-7">¶</a></h3>
+<h3 id="Question-7">Question 7<a class="anchor-link" href="#Question-7">¶</a></h3><p>Yes, it seem that the DPS can still be applied to a Gibbs density as long as the energy is still differentiable. The point is that it seems that the method could be applied to a wider variety of noise... like Poisson-Gaussian that we observe in raw images. Example with the approximation we usually make for raw noise model $\sigma=\sqrt{ax+b}$ where the noise level depends on the gray level, $a$ describes shot noise, $b$ describes gaussian dark noise (thermal noise). In this case $f$ looks slightly more complex since the denominator is not constant anymore but still differentiable.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Question-8">Question 8<a class="anchor-link" href="#Question-8">¶</a></h3><p><img alt="" src="figures/blurred_face.png"/></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$T$</th>
+<th style="text-align:center">DPS $\eta$=1</th>
+<th style="text-align:center">DPS Adaptive $\eta$</th>
+<th style="text-align:center">$\Pi$ GDM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">100</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_eta1_T=100.png"/> 22.06db</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_eta=adapt_T=100.png"/> 25.6db</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_PIG_T=100.png"/> 29.98db</td>
+</tr>
+<tr>
+<td style="text-align:center">1000</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_eta_1_T=1000.png"/> 28.04db</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_eta=adapt_T=1000.png"/> 25.37db</td>
+<td style="text-align:center"><img alt="" src="figures/deblur_pigdm_t=1000.png"/> 26.5db</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$T$</th>
+<th style="text-align:center">DPS $\eta$=1</th>
+<th style="text-align:center">DPS Adaptive $\eta$</th>
+<th style="text-align:center">$\Pi$ GDM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">100</td>
+<td style="text-align:center">22.06db</td>
+<td style="text-align:center">25.6db</td>
+<td style="text-align:center"><strong>29.98db</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">1000</td>
+<td style="text-align:center"><strong>28.04db</strong></td>
+<td style="text-align:center">25.37db</td>
+<td style="text-align:center">26.5db</td>
+</tr>
+</tbody>
+</table>
+<p>$\Pi$ GDM gets better results than DPS. Surprisingly the performance decreases when the number of steps largely increases.
+Results of $\Pi$ GDM with 100 steps look better than DPS both visually (faithful!) and quantitatively.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<hr/>
+<h3 id="Personal-notes:">Personal notes:<a class="anchor-link" href="#Personal-notes:">¶</a></h3><p>Question 6:</p>
+<blockquote>
+<p>It seems like the right $\eta$ parameter (or scheme) could be searched for... for instance by learning (with gradient descent) with a frozen diffusion model, one could find the best tuning parameters.</p>
+</blockquote>
+<p>Question 8</p>
+<blockquote>
+<ul>
+<li>Diffusion by Posterior Sampling (DPS)<ul>
+<li>rough approximation  $p(x_0|x_t) \approx \delta_{\widehat{x_0}(x_t)}(x_0)$</li>
+<li>Introduce extra step during diffusion process of deblurring gradient descent step $H^T(\widehat{x_0}(x_t) - y)$ .</li>
+</ul>
+</li>
+<li>$\Pi$ GDM = Pseudo inverse guided diffusion model<ul>
+<li>Laplace approximation for $p(x_0|x_t)$ (variance approximation provided by the scheduling scheme).</li>
+<li>More sophisticated data prior step (looks like a Wiener Filter tiny step (differs from the rough deconvolution in DPS which does not really take noise into account...)</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>On Question 7:</p>
+<blockquote>
+<p>this is my best take at this question, I'm not very familiar with Gibbs density but it clearly opens my curiosity. <a href="https://ieeexplore.ieee.org/document/8363725">Bayesian joint super-resolution, deconvolution, and denoising of images with poisson-gaussian noise</a> seems to talk about the proper modeling of Poisson Gaussian noise.</p>
+</blockquote>
 </div>
 </div>
 </div>
