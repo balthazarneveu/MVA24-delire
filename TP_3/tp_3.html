@@ -7787,7 +7787,18 @@ $$\nabla \log p(x_t) = - \frac{1}{\sqrt{1-\bar\alpha_t}} \hat\epsilon_\theta(x_t
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Question-5">Question 5<a class="anchor-link" href="#Question-5">¶</a></h3><p>Let's check on a synthetic unitary test that we can compute the gradient of the "forward model" (blurring operator) with regard to the
+<h3 id="Question-5">Question 5<a class="anchor-link" href="#Question-5">¶</a></h3><div class="highlight"><pre><span></span><span class="c1"># Guidance</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">forward_model</span><span class="p">(</span><span class="n">x0_hat</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x0_hat</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="c1"># Guidance weight</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">scale_guidance</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">eta_t</span> <span class="o">=</span> <span class="n">beta_t</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">alpha_t</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">eta_t</span> <span class="o">=</span> <span class="mf">1.0</span>
+</pre></div>
+<p>Let's check on a synthetic unitary test that we can compute the gradient of the "forward model" (blurring operator) with regard to the
 input.</p>
 <p>See the code below for more details.</p>
 <p><img alt="" src="figures/blurt_kernel.png"/>
