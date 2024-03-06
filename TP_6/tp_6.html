@@ -7596,9 +7596,9 @@ We can observe that:</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Question-1:">Question 1:<a class="anchor-link" href="#Question-1:">¶</a></h4><ul>
+<h4 id="Question-1:-Overfitting">Question 1: Overfitting<a class="anchor-link" href="#Question-1:-Overfitting">¶</a></h4><ul>
 <li>"Collapse" : A trivial solution that the network could learn is to directly output the original image, no matter the input noise vector...(sometimes called mode collapse). The loss would become 0.</li>
-<li>Another trickier case of overfiting it that the network outputs the original image with geometric transformations such as rotation or translation which keeps the same feature map (neglecting border effects, channel covariances / Gramm Matrices would remain invariant).</li>
+<li>Another trickier case of overfiting it that the network outputs the original image with geometric transformations which preserves feature maps invariance with regard to covariance (neglecting border effects, channel covariances / Gramm Matrices would remain invariant)... which basically <strong>mean translations</strong>! if you rotate or scale the image, you won't get exactly the same feature maps... (but CNN are translation equivariant).</li>
 </ul>
 </div>
 </div>
@@ -7673,7 +7673,7 @@ It is a pyramidal architecture with 5 scales which will progressively:</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Question-6-%22Redresse%22">Question 6 "Redresse"<a class="anchor-link" href="#Question-6-%22Redresse%22">¶</a></h4><p>Applying a transfer function to a uniform noise probability allows changing the noise distribution from a uniform distribution to a more peaky distribution.
+<h4 id="Question-6-Redresse">Question 6 <code>Redresse</code><a class="anchor-link" href="#Question-6-Redresse">¶</a></h4><p>Applying a transfer function to a uniform noise probability allows changing the noise distribution from a uniform distribution to a more peaky distribution.
 We could morph a given noise instance from the uniform distribution into another instance of the uniform distribution by passing through a peaky distribution to get a texture nearly "spatially uniform" (look at the all gray homogenous soap bubbles in the middle of the video when we use the redresse function!).</p>
 <p><img alt="" src="figures/distribution_change_redresse.png"/></p>
 <table>
